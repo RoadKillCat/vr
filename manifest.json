@@ -1,4 +1,5 @@
 {
 	"name": "VR",
-	"display": "fullscreen"
+	"display": "standalone",
+	"orientation": "landscape"
 }
