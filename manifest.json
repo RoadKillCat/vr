@@ -1,6 +1,7 @@
 {
 	"name": "VR",
 	"display": "fullscreen",
+    "orientation": "landscape",
 	"icons": [
 		{"src": "icon.png",
          "sizes": "720x720",
