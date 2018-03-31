@@ -27,6 +27,6 @@ screen.orientation.onchange = function(){
 
 document.body.addEventListener('click', function(){
     document.body.webkitRequestFullscreen();
-    screen.orientation.lock('landscape');
+    //screen.orientation.lock('landscape');
     //fts();
 });

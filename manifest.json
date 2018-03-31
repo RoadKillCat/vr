@@ -1,5 +1,10 @@
 {
 	"name": "VR",
 	"display": "standalone",
-	"orientation": "landscape"
+	"icons": [
+		{"src": "icon.png",
+         "sizes": "720x720",
+         "type": "image/png"
+        }
+    ]
 }

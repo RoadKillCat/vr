@@ -1,0 +1,13 @@
+body {
+    margin: 0;
+    padding: 0;
+}
+#cnvs_l {
+    background-color: blue;
+}
+#cnvs_r {
+    background-color: red;
+}
+#cnvii {
+    display: none;
+}
