@@ -1,6 +1,6 @@
 {
 	"name": "VR",
-	"display": "standalone",
+	"display": "fullscreen",
 	"icons": [
 		{"src": "icon.png",
          "sizes": "720x720",
