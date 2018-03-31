@@ -14,6 +14,7 @@ function fts(){
     cnvs_l.height = cnvs_r.height = innerHeight;
 }
 
+/*
 screen.orientation.onchange = function(){
     if (document.webkitFullscreenElement){
         cnvii.style.display = 'inline';
@@ -22,10 +23,10 @@ screen.orientation.onchange = function(){
         cnvii.style.display = 'none';
         msg.style.display = 'block';
     }
-}
+}*/
 
 document.body.addEventListener('click', function(){
     document.body.webkitRequestFullscreen();
     screen.orientation.lock('landscape');
-    fts();
+    //fts();
 });
