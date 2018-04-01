@@ -41,5 +41,5 @@ function render_world(world){
                            pitch: cam.pitch,
                            roll: cam.roll,
                            fov: cam.fov},
-                   cnvs_l, wireframe);
+                   cnvs_r, wireframe);
 }
