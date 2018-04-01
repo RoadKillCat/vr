@@ -27,7 +27,7 @@ window.addEventListener('deviceorientation', function(e){
     i = e;
     cam.yaw   = (e.gamma < 0 ? e.alpha : (e.alpha + 180) % 360) - 180;
     cam.pitch = (e.gamma < 0 ? -90 : 90) - e.gamma;
-    cam.roll  = e.beta;
+    cam.roll  =  e.gamma < 0 ? (e.beta < 0 ? -180 : 180) - e.beta : e.beta;
 })
 
 function block(col){
