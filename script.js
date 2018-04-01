@@ -23,7 +23,7 @@ function update(time){
 window.requestAnimationFrame(update);
 
 window.addEventListener('deviceorientation', function(e){
-    cam.yaw   = e.alpha - 180;
+    cam.yaw   = (e.gamma < 0 ? e.alpha : (e.alpha + 180) % 360) - 180;
     cam.pitch = (e.gamma < 0 ? -90 : 90) - e.gamma;
     cam.roll  = e.beta;
 })
