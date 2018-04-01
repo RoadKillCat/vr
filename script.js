@@ -62,7 +62,7 @@ function orientation(e){
     cam.pitch = (e.gamma < 0 ? -90 : 90) - e.gamma;
     cam.roll  =  e.gamma < 0 ? (e.beta < 0 ? -180 : 180) - e.beta : e.beta;
     cam.roll  = (cam.roll < 0 ? 180 : -180) + cam.roll;
-})
+}
 
 function block(col){
     return [{verts: [{x: 0, y: 0, z: 0}, {x: 1, y: 0, z: 0}, {x: 1, y: 1, z: 0}, {x: 0, y: 1, z: 0}], col: col},
