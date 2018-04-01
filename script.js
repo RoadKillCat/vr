@@ -15,6 +15,19 @@ function fts(){
 
 document.addEventListener('DOMContentLoaded', fts);
 
+function update(time){
+    render_world(block('pink'));
+    window.requestAnimationFrame(update);
+}
+
+window.requestAnimationFrame(update);
+
+window.addEventListener('deviceorientation', function(e){
+    cam.yaw   = e.alpha - 180;
+    cam.pitch = (e.gamma < 0 ? -90 : 90) - e.gamma;
+    cam.roll  = e.beta;
+})
+
 function block(col){
     return [{verts: [{x: 0, y: 0, z: 0}, {x: 1, y: 0, z: 0}, {x: 1, y: 1, z: 0}, {x: 0, y: 1, z: 0}], col: col},
             {verts: [{x: 0, y: 0, z: 0}, {x: 0, y: 1, z: 0}, {x: 0, y: 1, z: 1}, {x: 0, y: 0, z: 1}], col: col},
@@ -23,6 +36,7 @@ function block(col){
             {verts: [{x: 0, y: 1, z: 0}, {x: 1, y: 1, z: 0}, {x: 1, y: 1, z: 1}, {x: 0, y: 1, z: 1}], col: col},
             {verts: [{x: 0, y: 0, z: 1}, {x: 1, y: 0, z: 1}, {x: 1, y: 1, z: 1}, {x: 0, y: 1, z: 1}], col: col}]
 }
+
 function render_world(world){
     //left eye
     zengine.render(world, {x: cam.x - eye_dist/2 * Math.cos(zengine.to_rad(cam.yaw)),
