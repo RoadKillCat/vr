@@ -7,7 +7,7 @@ let cnvii = document.getElementById('cnvii');
 let border_split = 1; //px
 
 //rendering
-let eye_dist = 0.4;
+let eye_dist = 0.2;
 let wireframe = false;
 let cam = {x: 0,
 		   y: -2,
