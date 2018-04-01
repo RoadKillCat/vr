@@ -21,7 +21,7 @@ let cam = {x: 0,
 //maze
 let block_col = 'pink';
 let maze_height, maze_width;
-maze_width = maze_height = 6;
+maze_width = maze_height = 4;
 
 //general
 let world = gen_maze_world();
