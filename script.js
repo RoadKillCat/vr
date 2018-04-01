@@ -6,32 +6,58 @@ var cnvii = document.getElementById('cnvii');
 
 var eye_dist = 0.2;
 var wireframe = false;
-var cam = {x: 0, y: -2, z: 0, yaw: 0, pitch: 0, roll: 0, fov: 60};
-
-function fts(){
-    cnvs_l.width = cnvs_r.width = innerWidth / 2;
-    cnvs_l.height = cnvs_r.height = innerHeight;
-}
+var cam = {x: 0,
+		   y: -2,
+           z: 0,
+           yaw: 0,
+           pitch: 0,
+           roll: 0,
+           fov: 60,
+		   step: 0.1};
 
 document.addEventListener('DOMContentLoaded', fts);
+document.addEventListener('keypress', keypress);
+window.requestAnimationFrame(update);
+window.addEventListener('deviceorientation', orientation);
 
 function update(time){
     render_world(block('pink'));
     window.requestAnimationFrame(update);
 }
 
-window.requestAnimationFrame(update);
-
-cnvii.style.display = 'none';
-var b = document.body;
-b.style.font = '256px monospace';
-document.addEventListener('keypress', keypress);
-
-function keypress(e){
-    b.innerText = e.key;
+function take_step(angle){
+    cam.x += cam.step * Math.sin(zengine.to_rad(angle));
+    cam.y += cam.step * Math.cos(zengine.to_rad(angle));
 }
 
-window.addEventListener('deviceorientation', function(e){
+function keypress(e){
+    switch (e.key){
+        case 'w':
+            take_step(0);
+            break;
+        case 'a':
+            take_step(0);
+            break;
+        case 's':
+            take_step(0);
+            break;
+        case 'd':
+            take_step(0);
+            break;
+        case 'i':
+            break;
+        case 'k':
+            break;
+        case 'o':
+            cam.z += cam.step;
+            break;
+        case 'l':
+            cam.z -= cam.step;
+            break;
+	}
+}
+
+function orientation(e){
     cam.yaw   = ((e.gamma < 0 ? e.alpha : (e.alpha + 180) % 360) - 180) * -1;
     cam.pitch = (e.gamma < 0 ? -90 : 90) - e.gamma;
     cam.roll  =  e.gamma < 0 ? (e.beta < 0 ? -180 : 180) - e.beta : e.beta;
@@ -66,4 +92,9 @@ function render_world(world){
                            roll: cam.roll,
                            fov: cam.fov},
                    cnvs_r, wireframe);
+}
+
+function fts(){
+    cnvs_l.width = cnvs_r.width = innerWidth / 2;
+    cnvs_l.height = cnvs_r.height = innerHeight;
 }
