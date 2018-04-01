@@ -9,5 +9,9 @@ body {
     background-color: red;
 }
 #cnvii {
-    display: block;
+    display: none;
+}
+#msg {
+    color: red;
+    font-size: 16px;
 }
