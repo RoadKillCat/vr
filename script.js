@@ -6,9 +6,6 @@ let cnvs_r = document.getElementById('cnvs_r');
 let cnvii = document.getElementById('cnvii');
 let border_split = 1; //px
 
-//general
-let world = [];
-
 //rendering
 let eye_dist = 0.2;
 let wireframe = false;
@@ -26,6 +23,9 @@ let block_col = 'pink';
 let maze_height, maze_width;
 maze_width = maze_height = 3;
 
+//general
+let world = gen_maze_world();
+
 document.addEventListener('DOMContentLoaded', start);
 document.addEventListener('keypress', keypress);
 window.addEventListener('deviceorientation', orientation);
@@ -33,8 +33,6 @@ window.requestAnimationFrame(update);
 
 function start(){
 	fts();
-	new_maze();
-	world = maze_to_world();
 }
 
 function update(time){
