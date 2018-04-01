@@ -7,5 +7,6 @@
          "type": "image/png"
         }
     ],
-	"display": "fullscreen"
+	"display": "fullscreen",
+    "orientation": "landscape"
 }
