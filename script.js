@@ -9,7 +9,6 @@ let border_split = 1; //px
 //general
 let world = [];
 
-
 //rendering
 let eye_dist = 0.2;
 let wireframe = false;
@@ -23,8 +22,9 @@ let cam = {x: 0,
 		   step: 0.1};
 
 //maze
-let maze_width = maze_height = 3;
 let block_col = 'pink';
+let maze_height, maze_width;
+maze_width = maze_height = 3;
 
 document.addEventListener('DOMContentLoaded', start);
 document.addEventListener('keypress', keypress);

@@ -6,9 +6,9 @@ function gen_maze_world(){
     for (let y = 0; y < maze_height * 2 + 1; y ++){
         for (let x = 0; x < maze_width * 2 + 1; x++){
             if (maze[y][x]){
-                world = world.concat(block(block_col).map(f => {
+                world = world.concat(block(block_col).map(f => ({
                             verts: f.verts.map(zengine.translate(x, y, 0)),
-                            col: f.col}));
+                            col: f.col})));
             }
         }
     }
