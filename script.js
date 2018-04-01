@@ -24,7 +24,7 @@ window.requestAnimationFrame(update);
 
 cnvii.style.display = 'none';
 var b = document.body;
-b.style..font = '256px monospace';
+b.style.font = '256px monospace';
 document.addEventListener('keypress', keypress);
 
 function keypress(e){
