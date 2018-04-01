@@ -7,7 +7,7 @@ let cnvii = document.getElementById('cnvii');
 let border_split = 1; //px
 
 //rendering
-let eye_dist = 0.2;
+let eye_dist = 0.4;
 let wireframe = false;
 let cam = {x: 0,
 		   y: -2,
@@ -16,12 +16,12 @@ let cam = {x: 0,
            pitch: 0,
            roll: 0,
            fov: 60,
-		   step: 0.1};
+		   step: 0.02};
 
 //maze
 let block_col = 'pink';
 let maze_height, maze_width;
-maze_width = maze_height = 3;
+maze_width = maze_height = 6;
 
 //general
 let world = gen_maze_world();
