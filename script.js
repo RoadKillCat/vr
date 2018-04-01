@@ -22,9 +22,16 @@ function update(time){
 
 window.requestAnimationFrame(update);
 
-var i;
+cnvii.style.display = 'none';
+var b = document.body;
+b.style..font = '256px monospace';
+document.addEventListener('keypress', keypress);
+
+function keypress(e){
+    b.innerText = e.key;
+}
+
 window.addEventListener('deviceorientation', function(e){
-    i = e;
     cam.yaw   = ((e.gamma < 0 ? e.alpha : (e.alpha + 180) % 360) - 180) * -1;
     cam.pitch = (e.gamma < 0 ? -90 : 90) - e.gamma;
     cam.roll  =  e.gamma < 0 ? (e.beta < 0 ? -180 : 180) - e.beta : e.beta;
