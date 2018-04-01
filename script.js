@@ -1,13 +1,19 @@
 'use strict';
 
-var cnvs_l = document.getElementById('cnvs_l');
-var cnvs_r = document.getElementById('cnvs_r');
-var cnvii = document.getElementById('cnvii');
+//layout / html
+let cnvs_l = document.getElementById('cnvs_l');
+let cnvs_r = document.getElementById('cnvs_r');
+let cnvii = document.getElementById('cnvii');
+let border_split = 1; //px
 
-var border_split = 1; //px
-var eye_dist = 0.2;
-var wireframe = false;
-var cam = {x: 0,
+//general
+let world = [];
+
+
+//rendering
+let eye_dist = 0.2;
+let wireframe = false;
+let cam = {x: 0,
 		   y: -2,
            z: 0,
            yaw: 0,
@@ -16,13 +22,23 @@ var cam = {x: 0,
            fov: 60,
 		   step: 0.1};
 
-document.addEventListener('DOMContentLoaded', fts);
+//maze
+let maze_width = maze_height = 3;
+let block_col = 'pink';
+
+document.addEventListener('DOMContentLoaded', start);
 document.addEventListener('keypress', keypress);
-window.requestAnimationFrame(update);
 window.addEventListener('deviceorientation', orientation);
+window.requestAnimationFrame(update);
+
+function start(){
+	fts();
+	new_maze();
+	world = maze_to_world();
+}
 
 function update(time){
-    render_world(block('pink'));
+    render_world(world);
     window.requestAnimationFrame(update);
 }
 
