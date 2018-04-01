@@ -25,10 +25,10 @@ window.requestAnimationFrame(update);
 var i;
 window.addEventListener('deviceorientation', function(e){
     i = e;
-    cam.yaw   = (e.gamma < 0 ? e.alpha : (e.alpha + 180) % 360) - 180;
+    cam.yaw   = ((e.gamma < 0 ? e.alpha : (e.alpha + 180) % 360) - 180) * -1;
     cam.pitch = (e.gamma < 0 ? -90 : 90) - e.gamma;
     cam.roll  =  e.gamma < 0 ? (e.beta < 0 ? -180 : 180) - e.beta : e.beta;
-    cam.roll  = (cam.roll < 0 ? 180 : -180) + cam.roll; //flip phone
+    cam.roll  = (cam.roll < 0 ? 180 : -180) + cam.roll;
 })
 
 function block(col){
