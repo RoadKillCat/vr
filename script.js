@@ -14,11 +14,11 @@ screen.orientation.onchange = function(){
 	if (/landscape/.test(screen.orientation.type)){
 		cnvii.style.display = 'inline';
 		msg.style.display = 'none';
-		fts();
+		setTimeout(fts, 500);
     } else {
 		cnvii.style.display = 'none';
-        msg.stlye.display = 'block';
-    }
+        msg.style.display = 'block';
+   }
 }
 
 fts();
