@@ -28,6 +28,7 @@ window.addEventListener('deviceorientation', function(e){
     cam.yaw   = (e.gamma < 0 ? e.alpha : (e.alpha + 180) % 360) - 180;
     cam.pitch = (e.gamma < 0 ? -90 : 90) - e.gamma;
     cam.roll  =  e.gamma < 0 ? (e.beta < 0 ? -180 : 180) - e.beta : e.beta;
+    cam.roll  = (cam.roll < 0 ? -180 : 180) - cam.roll; //flip phone
 })
 
 function block(col){
