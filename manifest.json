@@ -3,7 +3,8 @@
 	"display": "fullscreen",
     "orientation": "landscape",
 	"icons": [
-		{"src": "icon.png",
+		{
+         "src": "icon.png",
          "sizes": "720x720",
          "type": "image/png"
         }
