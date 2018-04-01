@@ -4,6 +4,7 @@ var cnvs_l = document.getElementById('cnvs_l');
 var cnvs_r = document.getElementById('cnvs_r');
 var cnvii = document.getElementById('cnvii');
 
+var border_split = 1; //px
 var eye_dist = 0.2;
 var wireframe = false;
 var cam = {x: 0,
@@ -95,6 +96,9 @@ function render_world(world){
 }
 
 function fts(){
-    cnvs_l.width = cnvs_r.width = innerWidth / 2;
+    cnvs_l.width = cnvs_r.width = (innerWidth - border_split) / 2;
     cnvs_l.height = cnvs_r.height = innerHeight;
+	cnvs_l.style.borderRight = 
+    cnvs_r.style.borderLeft  = 
+    border_split.toString() + 'px solid black';
 }

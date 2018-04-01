@@ -2,3 +2,11 @@ body {
     margin: 0;
     padding: 0;
 }
+
+cnvs_l {
+	float: left;
+}
+
+cnvs_r {
+	float: right;
+}
