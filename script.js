@@ -33,16 +33,16 @@ function take_step(angle){
 function keypress(e){
     switch (e.key){
         case 'w':
-            take_step(0);
+            take_step(cam.yaw);
             break;
         case 'a':
-            take_step(-90);
+            take_step(cam.yaw - 90);
             break;
         case 's':
-            take_step(180);
+            take_step(cam.yaw + 180);
             break;
         case 'd':
-            take_step(90);
+            take_step(cam.yaw + 90);
             break;
         case 'i':
             break;
