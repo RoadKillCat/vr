@@ -7,7 +7,7 @@ let cnvii = document.getElementById('cnvii');
 let border_split = 1; //px
 
 //rendering
-let horizon = 4;
+let horizon = 7;
 let eye_dist = 0.2;
 let wireframe = false;
 let cam = {x: 0,
@@ -47,7 +47,7 @@ function take_step(angle){
                 y: cam.y + cam.step * Math.cos(zengine.to_rad(angle))};
     let blk = {x: Math.floor(next.x),
                y: Math.floor(next.y)};
-    if (blk.x < 0 || blk.y < 0 || blk.x > maze_width * 2 + 1 || blk.y > maze_height * 2 + 1 || !maze_cur[blk.y][blk.x]){
+    if (blk.x < 0 || blk.y < 0 || blk.x < maze[0].length || blk.y > maze.length || !maze_cur[blk.y][blk.x]){
         cam.x = next.x;
         cam.y = next.y;
     }
