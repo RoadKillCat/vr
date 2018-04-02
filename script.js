@@ -22,9 +22,10 @@ let cam = {x: 0,
 let block_col = 'pink';
 let maze_height, maze_width;
 maze_width = maze_height = 4;
+let maze_cur = maze.generate_maze(maze_width, maze_height); 
 
 //general
-let world = gen_maze_world();
+let world = maze.gen_maze_world(maze_cur, block_col);
 
 document.addEventListener('DOMContentLoaded', start);
 document.addEventListener('keypress', keypress);
@@ -41,8 +42,14 @@ function update(time){
 }
 
 function take_step(angle){
-    cam.x += cam.step * Math.sin(zengine.to_rad(angle));
-    cam.y += cam.step * Math.cos(zengine.to_rad(angle));
+    next = {x: cam.step * Math.sin(zengine.to_rad(angle)),
+            y: cam.step * Math.cos(zengine.to_rad(angle))};
+    blk = {x: Math.floor(next.x / blockSz),
+           y: Math.floor(next.y / blockSz)}
+    if (blk.x < 0 || blk.y < 0 || blk.x > mazeWidth * 2 + 1 || blk.y > mazeHeight * 2 + 1 || !maze[blk.y][blk.x]){
+        cam.x = next.x
+        cam.y = next.y
+    }
 }
 
 function keypress(e){
