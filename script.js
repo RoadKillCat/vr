@@ -7,6 +7,7 @@ let cnvii = document.getElementById('cnvii');
 let border_split = 1; //px
 
 //rendering
+let horizon = 4;
 let eye_dist = 0.2;
 let wireframe = false;
 let cam = {x: 0,
@@ -104,7 +105,7 @@ function render_world(world){
                            pitch: cam.pitch,
                            roll: cam.roll,
                            fov: cam.fov},
-                   cnvs_l, wireframe);
+                   cnvs_l, wireframe, horizon);
     //right eye
     zengine.render(world, {x: cam.x + eye_dist/2 * Math.cos(zengine.to_rad(cam.yaw)),
                            y: cam.y - eye_dist/2 * Math.sin(zengine.to_rad(cam.yaw)),
@@ -113,7 +114,7 @@ function render_world(world){
                            pitch: cam.pitch,
                            roll: cam.roll,
                            fov: cam.fov},
-                   cnvs_r, wireframe);
+                   cnvs_r, wireframe, horizon);
 }
 
 function fts(){
