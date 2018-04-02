@@ -42,8 +42,8 @@ function update(time){
 }
 
 function take_step(angle){
-    let next = {x: cam.step * Math.sin(zengine.to_rad(angle)),
-                y: cam.step * Math.cos(zengine.to_rad(angle))};
+    let next = {x: cam.x + cam.step * Math.sin(zengine.to_rad(angle)),
+                y: cam.y + cam.step * Math.cos(zengine.to_rad(angle))};
     let blk = {x: Math.floor(next.x),
                y: Math.floor(next.y)};
     if (blk.x < 0 || blk.y < 0 || blk.x > maze_width * 2 + 1 || blk.y > maze_height * 2 + 1 || !maze_cur[blk.y][blk.x]){
