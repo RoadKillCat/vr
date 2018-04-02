@@ -7,7 +7,7 @@ let cnvii = document.getElementById('cnvii');
 let border_split = 1; //px
 
 //rendering
-let horizon = 7;
+let horizon = 8;
 let eye_dist = 0.2;
 let wireframe = false;
 let cam = {x: 0,
@@ -20,9 +20,9 @@ let cam = {x: 0,
 		   step: 0.02};
 
 //maze
-let block_col = 'pink';
+let block_col = '#fc4';
 let maze_height, maze_width;
-maze_width = maze_height = 4;
+maze_width = maze_height = 8;
 let maze_cur = maze.generate_maze(maze_width, maze_height); 
 
 //general
