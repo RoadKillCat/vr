@@ -47,7 +47,7 @@ function take_step(angle){
                 y: cam.y + cam.step * Math.cos(zengine.to_rad(angle))};
     let blk = {x: Math.floor(next.x),
                y: Math.floor(next.y)};
-    if (blk.x < 0 || blk.y < 0 || blk.x < maze_cur[0].length || blk.y > maze_cur.length || !maze_cur[blk.y][blk.x]){
+    if (blk.x < 0 || blk.y < 0 || blk.x > maze_cur[0].length || blk.y > maze_cur.length || !maze_cur[blk.y][blk.x]){
         cam.x = next.x;
         cam.y = next.y;
     }
