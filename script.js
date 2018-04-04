@@ -20,6 +20,7 @@ let cam = {x: 0,
            step: 0.02};
 
 //general
+let world;
 let screen = maze;
 
 document.addEventListener('DOMContentLoaded', start);

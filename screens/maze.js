@@ -32,7 +32,7 @@ let maze = {
             this.maze.push(r1.slice(0), r2.slice(0));
         }
         this.maze.push(r1.slice(0));
-        this.maze[0][1] = this.maze[height * 2][width * 2 - 1] = false;
+        this.maze[0][1] = this.maze[this.height * 2][this.width * 2 - 1] = false;
         //coordinates as [x, y] in maze
         let cells_in_maze = [[0,0]];
         var frontier_cells = [[1,0], [0,1]];
