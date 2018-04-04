@@ -60,7 +60,7 @@ let maze = {
         'a': ()=>{maze.take_step(cam.yaw-90)},
         's': ()=>{maze.take_step(cam.yaw+180)},
         'd': ()=>{maze.take_step(cam.yaw+90)},
-        'i': ()=>{},
+        'i': ()=>{calibrate()},
         'k': ()=>{},
         'o': ()=>{cam.z += cam.step},
         'l': ()=>{cam.z -= cam.step}
