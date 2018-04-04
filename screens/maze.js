@@ -65,7 +65,7 @@ let maze = {
         'o': ()=>{cam.z += cam.step},
         'l': ()=>{cam.z -= cam.step}
     },
-    take_step: function(){
+    take_step: function(angle){
         let next = {x: cam.x + cam.step * Math.sin(zengine.to_rad(angle)),
                     y: cam.y + cam.step * Math.cos(zengine.to_rad(angle))};
         let blk = {x: Math.floor(next.x),
