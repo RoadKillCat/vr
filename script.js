@@ -17,21 +17,33 @@ let cam = {x: 0,
            pitch: 0,
            roll: 0,
            fov: 60,
-           step: 0.02};
+           step: 0.02,
+           offset_yaw: 0,
+           offset_pitch: 0,
+           offset_roll: 0
+           };
 
 //general
 let world;
 let screen = maze;
+let first_orientation_event = true;
 
 document.addEventListener('DOMContentLoaded', start);
-document.addEventListener('keypress', keypress);
-window.addEventListener('deviceorientation', orient);
-window.requestAnimationFrame(update);
 
 function start(){
     fts();
     screen.init();
     world = screen.gen_world();
+    
+    document.addEventListener('keypress', keypress);
+    window.addEventListener('deviceorientation', orient);
+    window.requestAnimationFrame(update);
+}
+
+function calibrate(){
+   cam.offset_yaw   = -cam.raw_yaw;
+   cam.offset_roll  = -cam.raw_roll;
+   cam.offset_pitch = -cam.raw_pitch;
 }
 
 function update(time){
@@ -50,10 +62,17 @@ function orient(e){
         console.log('unfortunately your device does not support vr');
         return;
     }
-    cam.yaw   = ((e.gamma < 0 ? e.alpha : (e.alpha + 180) % 360) - 180) * -1;
-    cam.pitch = (e.gamma < 0 ? -90 : 90) - e.gamma;
-    cam.roll  =  e.gamma < 0 ? (e.beta < 0 ? -180 : 180) - e.beta : e.beta;
-    cam.roll  = (cam.roll < 0 ? 180 : -180) + cam.roll;
+    cam.raw_yaw   = ((e.gamma < 0 ? e.alpha : (e.alpha + 180) % 360) - 180) * -1;
+    cam.raw_pitch = (e.gamma < 0 ? -90 : 90) - e.gamma;
+    cam.raw_roll  =  e.gamma < 0 ? (e.beta < 0 ? -180 : 180) - e.beta : e.beta;
+    cam.raw_roll  = (cam.raw_roll < 0 ? 180 : -180) + cam.roll;
+    if (first_orientation_event){
+        calibrate();
+        first_orientation_event = false;
+    }
+    cam.yaw   += cam.offset_yaw; 
+    cam.pitch += cam.offset_roll;
+    cam.roll  += cam.offset_pitch;
 }
 
 function render_world(world){
