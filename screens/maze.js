@@ -56,10 +56,10 @@ let maze = {
         }
     },
     key_funcs: {
-        'w': ()=>{this.take_step(cam.yaw)},
-        'a': ()=>{this.take_step(cam.yaw-90)},
-        's': ()=>{this.take_step(cam.yaw+180)},
-        'd': ()=>{this.take_step(cam.yaw+90)},
+        'w': ()=>{maze.take_step(cam.yaw)},
+        'a': ()=>{maze.take_step(cam.yaw-90)},
+        's': ()=>{maze.take_step(cam.yaw+180)},
+        'd': ()=>{maze.take_step(cam.yaw+90)},
         'i': ()=>{},
         'k': ()=>{},
         'o': ()=>{cam.z += cam.step},
