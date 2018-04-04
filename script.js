@@ -70,9 +70,9 @@ function orient(e){
         calibrate();
         first_orientation_event = false;
     }
-    cam.yaw   += cam.offset_yaw; 
-    cam.pitch += cam.offset_roll;
-    cam.roll  += cam.offset_pitch;
+    cam.yaw   = cam.raw_yaw   + cam.offset_yaw; 
+    cam.pitch = cam.raw_pitch + cam.offset_pitch;
+    cam.roll  = cam.raw_roll  + cam.offset_roll;
 }
 
 function render_world(world){
