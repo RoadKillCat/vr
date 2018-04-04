@@ -9,8 +9,8 @@ let maze = {
     },
     gen_world: function(){
         let world = [];
-        for (let y = 0; y < this.height; y ++){
-            for (let x = 0; x < this.width; x++){
+        for (let y = 0; y < this.height * 2 + 1; y ++){
+            for (let x = 0; x < this.width * 2 + 1; x++){
                 if (this.maze[y][x]){
                     world = world.concat(this.block().map(f => ({
                                 verts: f.verts.map(zengine.translate(x, y, 0)),
