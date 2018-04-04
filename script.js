@@ -46,6 +46,10 @@ function keypress(e){
 }
 
 function orient(e){
+    if (!(e.alpha && e.beta && e.gamma)) {
+        console.log('unfortunately your device does not support vr');
+        return;
+    }
     cam.yaw   = ((e.gamma < 0 ? e.alpha : (e.alpha + 180) % 360) - 180) * -1;
     cam.pitch = (e.gamma < 0 ? -90 : 90) - e.gamma;
     cam.roll  =  e.gamma < 0 ? (e.beta < 0 ? -180 : 180) - e.beta : e.beta;
