@@ -65,7 +65,7 @@ function orient(e){
     cam.raw_yaw   = ((e.gamma < 0 ? e.alpha : (e.alpha + 180) % 360) - 180) * -1;
     cam.raw_pitch = (e.gamma < 0 ? -90 : 90) - e.gamma;
     cam.raw_roll  =  e.gamma < 0 ? (e.beta < 0 ? -180 : 180) - e.beta : e.beta;
-    cam.raw_roll  = (cam.raw_roll < 0 ? 180 : -180) + cam.roll;
+    cam.raw_roll  = (cam.raw_roll < 0 ? 180 : -180) + cam.raw_roll;
     if (first_orientation_event){
         calibrate();
         first_orientation_event = false;
