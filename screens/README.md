@@ -4,6 +4,7 @@ screens
 Each screen is a `.js` file containing an object which must have the following attributes:
 
 Key | Value
+----|------
 `init` | function called once to reset the state
 `gen_world` | funciton that should return a valid [zengine](http://github.com/roadkillcat/zengine) world
 `key_funcs` | object where each key is a function to be called when that key is pressed
