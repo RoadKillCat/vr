@@ -5,7 +5,7 @@ let maze = {
         this.block_col = '#fc4';
         this.height =
         this.width = 8;
-        this.gen_maze();
+        this.gen_maze(); 
     },
     gen_world: function(){
         let world = [];
