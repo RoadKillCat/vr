@@ -1,6 +1,6 @@
 'use strict';
 
-let maze = {
+let blocks = {
     init: function(){
         this.block_col = '#fc4';
         this.height =
