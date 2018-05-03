@@ -88,14 +88,17 @@ let blocks = {
         }
     },
     take_step: function(angle){
-        let next = {x: cam.x + cam.step * Math.sin(zengine.to_rad(angle)),
+        /*let next = {x: cam.x + cam.step * Math.sin(zengine.to_rad(angle)),
                     y: cam.y + cam.step * Math.cos(zengine.to_rad(angle))};
         let blk = {x: Math.floor(next.x),
                    y: Math.floor(next.y)};
+                   z
         if (blk.x < 0 || blk.y < 0 || blk.x > blocks.width || blk.y > blocks.height || !blocks.maze[blk.y][blk.x]){
             cam.x = next.x;
             cam.y = next.y;
-        }
+        }*/
+        cam.x += cam.step * Math.sin(zengine.to_rad(angle));
+        cam.y += cam.step * Math.cos(zengine.to_rad(angle));
     },
     block: function(){
         return [{verts: [{x: 0, y: 0, z: 0}, {x: 1, y: 0, z: 0}, {x: 1, y: 1, z: 0}, {x: 0, y: 1, z: 0}], col: blocks.block_col, side: 'bt'},
