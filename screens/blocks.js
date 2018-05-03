@@ -17,12 +17,13 @@ let blocks = {
         return world;
     },
     place: function(){
-        let blk = blocks.block();
         blocks.blocks.sort((a,b)=>zengine.distance(cam, {x:a.x+0.5, y: a.y+0.5, z:a.z+0.5}) -
                                   zengine.distance(cam, {x:b.x+0.5, y: b.y+0.5, z:b.z+0.5}));
         let hit = false;
         for (let i = 0; i < blocks.blocks.length; i++){
             if (hit) break;
+            let blk = blocks.block().sort((a,b)=>zengine.distance(cam, zengine.centroid(a.verts)) -
+                                                 zengine.distance(cam, zengine.centroid(b.verts)));
             for (let j = 0; j < blk.length; j++){
                 console.log(i, j);
                 let f = blk[j].verts.map(zengine.translate(blocks.blocks[i].x,
@@ -35,7 +36,7 @@ let blocks = {
                                     .map(zengine.translate(cam.x, cam.y, cam.z));
                 //convert face to 2d
                 f = f.map(c=>({x: zengine.to_deg(Math.atan2(c.x - cam.x, c.y - cam.y)),
-                                   y: zengine.to_deg(Math.atan2(c.z - cam.z, c.y - cam.y))}));
+                               y: zengine.to_deg(Math.atan2(c.z - cam.z, c.y - cam.y))}));
                 //bounding box quick check
                 let min_x = f[0].x;
                 let max_x = f[0].x;
@@ -61,16 +62,22 @@ let blocks = {
                 if (!inside) continue;
                 console.log("hellooo");
                 hit = true;
-                let ps = [[ 0, 0,-1],
-                          [-1, 0, 0],
-                          [ 0,-1, 0],
-                          [ 1, 0, 0],
-                          [ 0, 1, 0],
-                          [ 0, 0, 1],
-                         ];
-                blocks.blocks.push({x: blocks.blocks[i].x + ps[j][0],
-                                    y: blocks.blocks[i].y + ps[j][1],
-                                    z: blocks.blocks[i].z + ps[j][2]})
+                let ps = {bt: [ 0, 0,-1],
+                          lt: [-1, 0, 0],
+                          fr: [ 0,-1, 0],
+                          rt: [ 1, 0, 0],
+                          bk: [ 0, 1, 0],
+                          tp: [ 0, 0, 1],
+                         };
+                let nb = {x: blocks.blocks[i].x + ps[blk[j].side][0],
+                          y: blocks.blocks[i].y + ps[blk[j].side][1],
+                          z: blocks.blocks[i].z + ps[blk[j].side][2]};
+                //may be needed if ordering not effective...
+                //for (let ii = 0; i < blocks.blocks.length; i++){
+                //    if (blocks.blocks[i].x == nb.x &&
+                //        blocks.blocks[i].y == nb.y &&
+                //        blocks.blocks[i].z == nb.z 
+                blocks.blocks.push(nb);
                 break;
             }
         }
@@ -86,12 +93,12 @@ let blocks = {
         }
     },
     block: function(){
-        return [{verts: [{x: 0, y: 0, z: 0}, {x: 1, y: 0, z: 0}, {x: 1, y: 1, z: 0}, {x: 0, y: 1, z: 0}], col: blocks.block_col}, //bottom
-                {verts: [{x: 0, y: 0, z: 0}, {x: 0, y: 1, z: 0}, {x: 0, y: 1, z: 1}, {x: 0, y: 0, z: 1}], col: blocks.block_col}, //left
-                {verts: [{x: 0, y: 0, z: 0}, {x: 1, y: 0, z: 0}, {x: 1, y: 0, z: 1}, {x: 0, y: 0, z: 1}], col: blocks.block_col}, //front
-                {verts: [{x: 1, y: 0, z: 0}, {x: 1, y: 1, z: 0}, {x: 1, y: 1, z: 1}, {x: 1, y: 0, z: 1}], col: blocks.block_col}, //right
-                {verts: [{x: 0, y: 1, z: 0}, {x: 1, y: 1, z: 0}, {x: 1, y: 1, z: 1}, {x: 0, y: 1, z: 1}], col: blocks.block_col}, //back
-                {verts: [{x: 0, y: 0, z: 1}, {x: 1, y: 0, z: 1}, {x: 1, y: 1, z: 1}, {x: 0, y: 1, z: 1}], col: blocks.block_col}] //top
+        return [{verts: [{x: 0, y: 0, z: 0}, {x: 1, y: 0, z: 0}, {x: 1, y: 1, z: 0}, {x: 0, y: 1, z: 0}], col: blocks.block_col, side: 'bt'},
+                {verts: [{x: 0, y: 0, z: 0}, {x: 0, y: 1, z: 0}, {x: 0, y: 1, z: 1}, {x: 0, y: 0, z: 1}], col: blocks.block_col, side: 'lt'},
+                {verts: [{x: 0, y: 0, z: 0}, {x: 1, y: 0, z: 0}, {x: 1, y: 0, z: 1}, {x: 0, y: 0, z: 1}], col: blocks.block_col, side: 'fr'},
+                {verts: [{x: 1, y: 0, z: 0}, {x: 1, y: 1, z: 0}, {x: 1, y: 1, z: 1}, {x: 1, y: 0, z: 1}], col: blocks.block_col, side: 'rt'},
+                {verts: [{x: 0, y: 1, z: 0}, {x: 1, y: 1, z: 0}, {x: 1, y: 1, z: 1}, {x: 0, y: 1, z: 1}], col: blocks.block_col, side: 'bk'},
+                {verts: [{x: 0, y: 0, z: 1}, {x: 1, y: 0, z: 1}, {x: 1, y: 1, z: 1}, {x: 0, y: 1, z: 1}], col: blocks.block_col, side: 'tp'}]
     }
 }
 
