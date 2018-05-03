@@ -2,86 +2,106 @@
 
 let blocks = {
     init: function(){
-        this.block_col = '#fc4';
-        this.height =
-        this.width = 8;
-        this.gen_maze(); 
+        blocks.block_col = '#fc4';
+        blocks.blocks = [{x: 0, y: 0, z: 0}];
     },
     gen_world: function(){
         let world = [];
-        for (let y = 0; y < this.height * 2 + 1; y ++){
-            for (let x = 0; x < this.width * 2 + 1; x++){
-                if (this.maze[y][x]){
-                    world = world.concat(this.block().map(f => ({
-                                verts: f.verts.map(zengine.translate(x, y, 0)),
-                                col: f.col})));
-                }
-            }
+        for (let i = 0; i < blocks.blocks.length; i++){
+            world = world.concat(blocks.block().map(f => ({
+                                    verts: f.verts.map(zengine.translate(blocks.blocks[i].x,
+                                                                         blocks.blocks[i].y,
+                                                                         blocks.blocks[i].z)),
+                                    col: f.col})));
         }
         return world;
     },
-    gen_maze: function(){
-        this.maze = [];
-        let r1 = [true];
-        let r2 = [true];
-        for (let c = 0; c < this.width; c++){
-            r1.push(true,  true);
-            r2.push(false, true);
-        }
-        for (let r = 0; r < this.height; r ++){
-            this.maze.push(r1.slice(0), r2.slice(0));
-        }
-        this.maze.push(r1.slice(0));
-        this.maze[0][1] = this.maze[this.height * 2][this.width * 2 - 1] = false;
-        //coordinates as [x, y] in maze
-        let cells_in_maze = [[0,0]];
-        var frontier_cells = [[1,0], [0,1]];
-        while (frontier_cells.length){
-            //fc = random frontier cell, adj_f = cell in maze adjacent to that frontier
-            let fc = frontier_cells[Math.floor(Math.random() * frontier_cells.length)];
-            let fc_adj = [[fc[0]+1,fc[1]],[fc[0]-1,fc[1]],[fc[0],fc[1]+1], [fc[0],fc[1]-1]].
-                                     filter(c => (cells_in_maze.some(o => (o[0] == c[0] && o[1] == c[1]))));
-            let adj_f = fc_adj[Math.floor(Math.random() * fc_adj.length)];
-            this.maze[fc[1] + adj_f[1] + 1][fc[0] + adj_f[0] + 1] = false;
-            cells_in_maze.push(fc);
-            frontier_cells = [];
-            for (let i = 0; i < cells_in_maze.length; i++){
-                let c = cells_in_maze[i];
-                let neighbours = [[c[0]+1,c[1]], [c[0]-1,c[1]], [c[0],c[1]+1], [c[0],c[1]-1]].filter(cc => 
-                                   cc[0] >= 0 && cc[1] >= 0 && cc[0] < this.width && cc[1] < this.height &&
-                                   !cells_in_maze.some(mc  => (mc[0] == cc[0] && mc[1] == cc[1])) && 
-                                   !frontier_cells.some(fc => (fc[0] == cc[0] && fc[1] == cc[1])));
-                frontier_cells = frontier_cells.concat(neighbours);
+    place: function(){
+        let blk = blocks.block();
+        blocks.blocks.sort((a,b)=>zengine.distance(cam, {x:a.x+0.5, y: a.y+0.5, z:a.z+0.5}) -
+                                  zengine.distance(cam, {x:b.x+0.5, y: b.y+0.5, z:b.z+0.5}));
+        let hit = false;
+        for (let i = 0; i < blocks.blocks.length; i++){
+            if (hit) break;
+            for (let j = 0; j < blk.length; j++){
+                console.log(i, j);
+                let f = blk[j].verts.map(zengine.translate(blocks.blocks[i].x,
+                                                           blocks.blocks[i].y,
+                                                           blocks.blocks[i].z))
+                                    .map(zengine.translate(-cam.x, -cam.y, -cam.z))
+                                    .map(zengine.z_axis_rotate(zengine.to_rad(cam.yaw)))
+                                    .map(zengine.y_axis_rotate(zengine.to_rad(cam.roll)))
+                                    .map(zengine.x_axis_rotate(zengine.to_rad(cam.pitch)))
+                                    .map(zengine.translate(cam.x, cam.y, cam.z));
+                //convert face to 2d
+                f = f.map(c=>({x: zengine.to_deg(Math.atan2(c.x - cam.x, c.y - cam.y)),
+                                   y: zengine.to_deg(Math.atan2(c.z - cam.z, c.y - cam.y))}));
+                //bounding box quick check
+                let min_x = f[0].x;
+                let max_x = f[0].x;
+                let min_y = f[0].y;
+                let max_y = f[0].y;
+                for (let i = 1; i < f.length; i++){
+                    min_x = Math.min(min_x, f[i].x);
+                    max_x = Math.max(max_x, f[i].x);
+                    min_y = Math.min(min_y, f[i].y);
+                    max_y = Math.max(max_y, f[i].y);
+                }
+                if (min_x > 0 || max_x < 0 || min_y > 0 || max_y < 0) continue;
+                //if passed bounding box, try ray casting
+                let inside = false;
+                for (let ii = 0; ii < f.length; ii++){
+                    let jj = ii < f.length - 1 ? ii + 1 : 0;
+                    //check if crosses line and if that cross is to the right of the point
+                    if ((f[ii].y < 0 && f[jj].y > 0 || f[ii].y > 0 && f[jj].y < 0) &&
+                        0 < ((0 - f[ii].y) * (f[jj].x - f[ii].x)) / (f[jj].y - f[ii].y) + f[ii].x){
+                        inside = !inside;
+                    }
+                }
+                if (!inside) continue;
+                console.log("hellooo");
+                hit = true;
+                let ps = [[ 0, 0,-1],
+                          [-1, 0, 0],
+                          [ 0,-1, 0],
+                          [ 1, 0, 0],
+                          [ 0, 1, 0],
+                          [ 0, 0, 1],
+                         ];
+                blocks.blocks.push({x: blocks.blocks[i].x + ps[j][0],
+                                    y: blocks.blocks[i].y + ps[j][1],
+                                    z: blocks.blocks[i].z + ps[j][2]})
+                break;
             }
         }
-    },
-    key_funcs: {
-        'w': ()=>{maze.take_step(cam.yaw)},
-        'a': ()=>{maze.take_step(cam.yaw-90)},
-        's': ()=>{maze.take_step(cam.yaw+180)},
-        'd': ()=>{maze.take_step(cam.yaw+90)},
-        'i': ()=>{calibrate()},
-        'k': ()=>{},
-        'o': ()=>{cam.z += cam.step},
-        'l': ()=>{cam.z -= cam.step}
     },
     take_step: function(angle){
         let next = {x: cam.x + cam.step * Math.sin(zengine.to_rad(angle)),
                     y: cam.y + cam.step * Math.cos(zengine.to_rad(angle))};
         let blk = {x: Math.floor(next.x),
                    y: Math.floor(next.y)};
-        if (blk.x < 0 || blk.y < 0 || blk.x > this.width || blk.y > this.height || !this.maze[blk.y][blk.x]){
+        if (blk.x < 0 || blk.y < 0 || blk.x > blocks.width || blk.y > blocks.height || !blocks.maze[blk.y][blk.x]){
             cam.x = next.x;
             cam.y = next.y;
         }
     },
     block: function(){
-        return [{verts: [{x: 0, y: 0, z: 0}, {x: 1, y: 0, z: 0}, {x: 1, y: 1, z: 0}, {x: 0, y: 1, z: 0}], col: this.block_col},
-                {verts: [{x: 0, y: 0, z: 0}, {x: 0, y: 1, z: 0}, {x: 0, y: 1, z: 1}, {x: 0, y: 0, z: 1}], col: this.block_col},
-                {verts: [{x: 0, y: 0, z: 0}, {x: 1, y: 0, z: 0}, {x: 1, y: 0, z: 1}, {x: 0, y: 0, z: 1}], col: this.block_col},
-                {verts: [{x: 1, y: 0, z: 0}, {x: 1, y: 1, z: 0}, {x: 1, y: 1, z: 1}, {x: 1, y: 0, z: 1}], col: this.block_col},
-                {verts: [{x: 0, y: 1, z: 0}, {x: 1, y: 1, z: 0}, {x: 1, y: 1, z: 1}, {x: 0, y: 1, z: 1}], col: this.block_col},
-                {verts: [{x: 0, y: 0, z: 1}, {x: 1, y: 0, z: 1}, {x: 1, y: 1, z: 1}, {x: 0, y: 1, z: 1}], col: this.block_col}]
+        return [{verts: [{x: 0, y: 0, z: 0}, {x: 1, y: 0, z: 0}, {x: 1, y: 1, z: 0}, {x: 0, y: 1, z: 0}], col: blocks.block_col}, //bottom
+                {verts: [{x: 0, y: 0, z: 0}, {x: 0, y: 1, z: 0}, {x: 0, y: 1, z: 1}, {x: 0, y: 0, z: 1}], col: blocks.block_col}, //left
+                {verts: [{x: 0, y: 0, z: 0}, {x: 1, y: 0, z: 0}, {x: 1, y: 0, z: 1}, {x: 0, y: 0, z: 1}], col: blocks.block_col}, //front
+                {verts: [{x: 1, y: 0, z: 0}, {x: 1, y: 1, z: 0}, {x: 1, y: 1, z: 1}, {x: 1, y: 0, z: 1}], col: blocks.block_col}, //right
+                {verts: [{x: 0, y: 1, z: 0}, {x: 1, y: 1, z: 0}, {x: 1, y: 1, z: 1}, {x: 0, y: 1, z: 1}], col: blocks.block_col}, //back
+                {verts: [{x: 0, y: 0, z: 1}, {x: 1, y: 0, z: 1}, {x: 1, y: 1, z: 1}, {x: 0, y: 1, z: 1}], col: blocks.block_col}] //top
     }
+}
 
+blocks.key_funcs = {
+    'w': ()=>{maze.take_step(cam.yaw)},
+    'a': ()=>{maze.take_step(cam.yaw-90)},
+    's': ()=>{maze.take_step(cam.yaw+180)},
+    'd': ()=>{maze.take_step(cam.yaw+90)},
+    'i': helpers.calibrate,
+    'k': blocks.place,
+    'o': ()=>{cam.z += cam.step},
+    'l': ()=>{cam.z -= cam.step}
 }
