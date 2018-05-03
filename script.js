@@ -4,7 +4,7 @@
 let cnvs_l = document.getElementById('cnvs_l');
 let cnvs_r = document.getElementById('cnvs_r');
 let cnvii  = document.getElementById('cnvii');
-let border_split = 1; //px
+let border_width = 2; //px
 
 //rendering
 let horizon = 8;
@@ -24,8 +24,7 @@ let cam = {x: 0,
            };
 
 //general
-let world;
-let screen = maze;
+let screen = blocks;
 let first_orientation_event = true;
 
 document.addEventListener('DOMContentLoaded', start);
@@ -33,10 +32,13 @@ document.addEventListener('DOMContentLoaded', start);
 function start(){
     fts();
     screen.init();
-    world = screen.gen_world();
-    
     document.addEventListener('keypress', keypress);
     window.addEventListener('deviceorientation', orient);
+    window.requestAnimationFrame(update);
+}
+
+function update(time){
+    render_world(screen.gen_world());
     window.requestAnimationFrame(update);
 }
 
@@ -44,11 +46,6 @@ function calibrate(){
    cam.offset_yaw   = -cam.raw_yaw;
    cam.offset_roll  = -cam.raw_roll;
    cam.offset_pitch = -cam.raw_pitch;
-}
-
-function update(time){
-    render_world(world);
-    window.requestAnimationFrame(update);
 }
 
 function keypress(e){
@@ -97,9 +94,9 @@ function render_world(world){
 }
 
 function fts(){
-    cnvs_l.width = cnvs_r.width = (innerWidth - border_split) / 2;
+    cnvs_l.width = cnvs_r.width = (innerWidth - border_width) / 2;
     cnvs_l.height = cnvs_r.height = innerHeight;
     cnvs_l.style.borderRight = 
     cnvs_r.style.borderLeft  = 
-    border_split.toString() + 'px solid black';
+    (border_width/2).toString() + 'px dotted black';
 }
