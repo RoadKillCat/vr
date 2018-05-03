@@ -2,6 +2,8 @@
 
 let blocks = {
     init: function(){
+        blocks.last_place = 0;
+        blocks.place_speed = 400; //delay
         blocks.block_col = '#fc4';
         blocks.blocks = [{x: 0, y: 0, z: 0}];
     },
@@ -17,6 +19,9 @@ let blocks = {
         return world;
     },
     place: function(){
+        let t = performance.now();
+        if (!(t - blocks.last_place > blocks.place_speed)) return;
+        blocks.last_place = t;
         blocks.blocks.sort((a,b)=>zengine.distance(cam, {x:a.x+0.5, y: a.y+0.5, z:a.z+0.5}) -
                                   zengine.distance(cam, {x:b.x+0.5, y: b.y+0.5, z:b.z+0.5}));
         let hit = false;
