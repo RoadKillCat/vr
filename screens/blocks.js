@@ -118,7 +118,6 @@ let blocks = {
         ctx_r.arc(cnvs_r.width/2 + dst, cnvs_r.height/2, r, 0, Math.PI * 2);
         ctx_l.stroke();
         ctx_r.stroke();
-        console.log("stroked?");
     }
 }
 
