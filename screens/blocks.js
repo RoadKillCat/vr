@@ -111,11 +111,11 @@ let blocks = {
     hud: function(){
         let r = 4;
         //distance from centre that the hud should be translated
-        let dst = Math.atan2(cam.hud_dist, cam.eye_dist/2) / cam.fov * cnvs_l.width;
+        let dst = zengine.to_deg(Math.atan2(cam.eye_dist/2, cam.hud_dist)) / cam.fov * cnvs_l.width;
         ctx_l.beginPath();
         ctx_r.beginPath();
         ctx_l.arc(cnvs_l.width/2 + dst, cnvs_l.height/2, r, 0, Math.PI * 2);
-        ctx_r.arc(cnvs_r.width/2 + dst, cnvs_r.height/2, r, 0, Math.PI * 2);
+        ctx_r.arc(cnvs_r.width/2 - dst, cnvs_r.height/2, r, 0, Math.PI * 2);
         ctx_l.stroke();
         ctx_r.stroke();
     }
