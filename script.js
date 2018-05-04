@@ -6,9 +6,11 @@ let cnvs_r = document.getElementById('cnvs_r');
 let cnvii  = document.getElementById('cnvii');
 let border_width = 2; //px
 
+//get contexts for HUDs etc.
+let ctx_l = cnvs_l.getContext('2d')
+let ctx_r = cnvs_r.getContext('2d')
+
 //rendering
-let horizon = 8;
-let eye_dist = 0.2;
 let wireframe = false;
 let cam = {x: 0,
            y: -2,
@@ -18,9 +20,9 @@ let cam = {x: 0,
            roll: 0,
            fov: 60,
            step: 0.02,
-           offset_yaw: 0,
-           offset_pitch: 0,
-           offset_roll: 0
+           horizon: 8,
+           eye_dist: 0.2,
+           hud_dist: 1
            };
 
 //general
@@ -39,13 +41,13 @@ function start(){
 
 function update(time){
     render_world(screen.gen_world());
+    if (screen.hud) screen.hud();
     window.requestAnimationFrame(update);
 }
 
 function keypress(e){
-    if (screen.key_funcs.hasOwnProperty(e.key)){
-        screen.key_funcs[e.key]();
-    }
+    if (screen.key_funcs[e.key])
+    screen.key_funcs[e.key]();
 }
 
 function orient(e){
@@ -57,7 +59,6 @@ function orient(e){
     cam.raw_pitch = (e.gamma < 0 ? -90 : 90) - e.gamma;
     cam.raw_roll  =  e.gamma < 0 ? (e.beta < 0 ? -180 : 180) - e.beta : e.beta;
     cam.raw_roll  = (cam.raw_roll < 0 ? 180 : -180) + cam.raw_roll;
-    console.log(cam.raw_yaw, cam.raw_pitch, cam.raw_roll);
     if (first_orientation_event){
         helpers.calibrate();
         first_orientation_event = false;
@@ -69,23 +70,23 @@ function orient(e){
 
 function render_world(world){
     //left eye
-    zengine.render(world, {x: cam.x - eye_dist/2 * Math.cos(zengine.to_rad(cam.yaw)),
-                           y: cam.y + eye_dist/2 * Math.sin(zengine.to_rad(cam.yaw)),
+    zengine.render(world, {x: cam.x - cam.eye_dist/2 * Math.cos(zengine.to_rad(cam.yaw)),
+                           y: cam.y + cam.eye_dist/2 * Math.sin(zengine.to_rad(cam.yaw)),
                            z: cam.z,
                            yaw: cam.yaw,
                            pitch: cam.pitch,
                            roll: cam.roll,
                            fov: cam.fov},
-                   cnvs_l, wireframe, horizon);
+                   cnvs_l, wireframe, cam.horizon);
     //right eye
-    zengine.render(world, {x: cam.x + eye_dist/2 * Math.cos(zengine.to_rad(cam.yaw)),
-                           y: cam.y - eye_dist/2 * Math.sin(zengine.to_rad(cam.yaw)),
+    zengine.render(world, {x: cam.x + cam.eye_dist/2 * Math.cos(zengine.to_rad(cam.yaw)),
+                           y: cam.y - cam.eye_dist/2 * Math.sin(zengine.to_rad(cam.yaw)),
                            z: cam.z,
                            yaw: cam.yaw,
                            pitch: cam.pitch,
                            roll: cam.roll,
                            fov: cam.fov},
-                   cnvs_r, wireframe, horizon);
+                   cnvs_r, wireframe, cam.horizon);
 }
 
 function fts(){

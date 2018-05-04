@@ -107,6 +107,18 @@ let blocks = {
                 {verts: [{x: 1, y: 0, z: 0}, {x: 1, y: 1, z: 0}, {x: 1, y: 1, z: 1}, {x: 1, y: 0, z: 1}], col: blocks.block_col, side: 'rt'},
                 {verts: [{x: 0, y: 1, z: 0}, {x: 1, y: 1, z: 0}, {x: 1, y: 1, z: 1}, {x: 0, y: 1, z: 1}], col: blocks.block_col, side: 'bk'},
                 {verts: [{x: 0, y: 0, z: 1}, {x: 1, y: 0, z: 1}, {x: 1, y: 1, z: 1}, {x: 0, y: 1, z: 1}], col: blocks.block_col, side: 'tp'}]
+    },
+    hud: function(){
+        let r = 4;
+        //distance from centre that the hud should be translated
+        let dst = Math.atan2(cam.hud_dist, cam.eye_dist/2) / cam.fov * cnvs_l.width;
+        ctx_l.beginPath();
+        ctx_r.beginPath();
+        ctx_l.arc(cnvs_l.width/2 + dst, cnvs_l.height/2, r, 0, Math.PI * 2);
+        ctx_r.arc(cnvs_r.width/2 + dst, cnvs_r.height/2, r, 0, Math.PI * 2);
+        ctx_l.stroke();
+        ctx_r.stroke();
+        console.log("stroked?");
     }
 }
 
@@ -118,5 +130,10 @@ blocks.key_funcs = {
     'i': helpers.calibrate,
     'k': blocks.place,
     'o': ()=>{cam.z += cam.step},
-    'l': ()=>{cam.z -= cam.step}
+    'l': ()=>{cam.z -= cam.step},
+    //pc funcs for when testing without phone
+    'e': ()=>{cam.yaw   += 10},
+    'q': ()=>{cam.yaw   -= 10},
+    'r': ()=>{cam.pitch += 10},
+    'f': ()=>{cam.pitch -= 10}
 }
