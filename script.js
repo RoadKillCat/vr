@@ -42,12 +42,6 @@ function update(time){
     window.requestAnimationFrame(update);
 }
 
-function calibrate(){
-   cam.offset_yaw   = -cam.raw_yaw;
-   cam.offset_roll  = -cam.raw_roll;
-   cam.offset_pitch = -cam.raw_pitch;
-}
-
 function keypress(e){
     if (screen.key_funcs.hasOwnProperty(e.key)){
         screen.key_funcs[e.key]();
@@ -63,11 +57,12 @@ function orient(e){
     cam.raw_pitch = (e.gamma < 0 ? -90 : 90) - e.gamma;
     cam.raw_roll  =  e.gamma < 0 ? (e.beta < 0 ? -180 : 180) - e.beta : e.beta;
     cam.raw_roll  = (cam.raw_roll < 0 ? 180 : -180) + cam.raw_roll;
+    console.log(cam.raw_yaw, cam.raw_pitch, cam.raw_roll);
     if (first_orientation_event){
-        calibrate();
+        helpers.calibrate();
         first_orientation_event = false;
     }
-    cam.yaw   = cam.raw_yaw   + cam.offset_yaw; 
+    cam.yaw   = cam.raw_yaw   + cam.offset_yaw;
     cam.pitch = cam.raw_pitch + cam.offset_pitch;
     cam.roll  = cam.raw_roll  + cam.offset_roll;
 }

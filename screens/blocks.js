@@ -111,10 +111,10 @@ let blocks = {
 }
 
 blocks.key_funcs = {
-    'w': ()=>{maze.take_step(cam.yaw)},
-    'a': ()=>{maze.take_step(cam.yaw-90)},
-    's': ()=>{maze.take_step(cam.yaw+180)},
-    'd': ()=>{maze.take_step(cam.yaw+90)},
+    'w': ()=>{blocks.take_step(cam.yaw)},
+    'a': ()=>{blocks.take_step(cam.yaw-90)},
+    's': ()=>{blocks.take_step(cam.yaw+180)},
+    'd': ()=>{blocks.take_step(cam.yaw+90)},
     'i': helpers.calibrate,
     'k': blocks.place,
     'o': ()=>{cam.z += cam.step},
