@@ -27,14 +27,14 @@ let blocks = {
         let hit = false;
         for (let i = 0; i < blocks.blocks.length; i++){
             if (hit) break;
-            let blk = blocks.block().sort((a,b)=>zengine.distance(cam, zengine.centroid(a.verts)) -
+            let blk = blocks.block().map(f => ({verts:
+            f.verts.map(zengine.translate(blocks.blocks[i].x, blocks.blocks[i].y, blocks.blocks[i].z)),
+                                               side: f.side}))
+                                    .sort((a,b)=>zengine.distance(cam, zengine.centroid(a.verts))-
                                                  zengine.distance(cam, zengine.centroid(b.verts)));
             for (let j = 0; j < blk.length; j++){
                 console.log(i, j);
-                let f = blk[j].verts.map(zengine.translate(blocks.blocks[i].x,
-                                                           blocks.blocks[i].y,
-                                                           blocks.blocks[i].z))
-                                    .map(zengine.translate(-cam.x, -cam.y, -cam.z))
+                let f = blk[j].verts.map(zengine.translate(-cam.x, -cam.y, -cam.z))
                                     .map(zengine.z_axis_rotate(zengine.to_rad(cam.yaw)))
                                     .map(zengine.y_axis_rotate(zengine.to_rad(cam.roll)))
                                     .map(zengine.x_axis_rotate(zengine.to_rad(cam.pitch)))
