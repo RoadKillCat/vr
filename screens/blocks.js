@@ -2,15 +2,21 @@
 
 let blocks = {
     init: function(){
+        cam.x = cam.y = 0;
+        cam.z = 2;
         blocks.last_place = 0;
         blocks.place_speed = 400; //delay
-        blocks.block_col = '#fc4';
-        blocks.blocks = [{x: 0, y: 0, z: 0}];
+        blocks.blocks = [];
+        for (let x = -10; x < 10; x++){
+            for (let y = -10; y < 10; y++){
+                blocks.blocks.push({x: x, y: y, z: 0, b: objects.grass});
+            }
+        }
     },
     gen_world: function(){
         let world = [];
         for (let i = 0; i < blocks.blocks.length; i++){
-            world = world.concat(blocks.block().map(f => ({
+            world = world.concat(blocks.blocks[i].b().map(f => ({
                                     verts: f.verts.map(zengine.translate(blocks.blocks[i].x,
                                                                          blocks.blocks[i].y,
                                                                          blocks.blocks[i].z)),
@@ -24,16 +30,13 @@ let blocks = {
         blocks.last_place = t;
         blocks.blocks.sort((a,b)=>zengine.distance(cam, {x:a.x+0.5, y: a.y+0.5, z:a.z+0.5}) -
                                   zengine.distance(cam, {x:b.x+0.5, y: b.y+0.5, z:b.z+0.5}));
-        let hit = false;
         for (let i = 0; i < blocks.blocks.length; i++){
-            if (hit) break;
-            let blk = blocks.block().map(f => ({verts:
+            let blk = objects.cube().map(f => ({verts:
             f.verts.map(zengine.translate(blocks.blocks[i].x, blocks.blocks[i].y, blocks.blocks[i].z)),
                                                side: f.side}))
                                     .sort((a,b)=>zengine.distance(cam, zengine.centroid(a.verts))-
                                                  zengine.distance(cam, zengine.centroid(b.verts)));
             for (let j = 0; j < blk.length; j++){
-                console.log(i, j);
                 let f = blk[j].verts.map(zengine.translate(-cam.x, -cam.y, -cam.z))
                                     .map(zengine.z_axis_rotate(zengine.to_rad(cam.yaw)))
                                     .map(zengine.y_axis_rotate(zengine.to_rad(cam.roll)))
@@ -65,8 +68,7 @@ let blocks = {
                     }
                 }
                 if (!inside) continue;
-                console.log("hellooo");
-                hit = true;
+                console.log('hit');
                 let ps = {bt: [ 0, 0,-1],
                           lt: [-1, 0, 0],
                           fr: [ 0,-1, 0],
@@ -76,14 +78,15 @@ let blocks = {
                          };
                 let nb = {x: blocks.blocks[i].x + ps[blk[j].side][0],
                           y: blocks.blocks[i].y + ps[blk[j].side][1],
-                          z: blocks.blocks[i].z + ps[blk[j].side][2]};
+                          z: blocks.blocks[i].z + ps[blk[j].side][2],
+                          b: objects.cube};
                 //may be needed if ordering not effective...
                 //for (let ii = 0; i < blocks.blocks.length; i++){
                 //    if (blocks.blocks[i].x == nb.x &&
                 //        blocks.blocks[i].y == nb.y &&
                 //        blocks.blocks[i].z == nb.z 
                 blocks.blocks.push(nb);
-                break;
+                return;
             }
         }
     },
@@ -99,14 +102,6 @@ let blocks = {
         }*/
         cam.x += cam.step * Math.sin(zengine.to_rad(angle));
         cam.y += cam.step * Math.cos(zengine.to_rad(angle));
-    },
-    block: function(){
-        return [{verts: [{x: 0, y: 0, z: 0}, {x: 1, y: 0, z: 0}, {x: 1, y: 1, z: 0}, {x: 0, y: 1, z: 0}], col: blocks.block_col, side: 'bt'},
-                {verts: [{x: 0, y: 0, z: 0}, {x: 0, y: 1, z: 0}, {x: 0, y: 1, z: 1}, {x: 0, y: 0, z: 1}], col: blocks.block_col, side: 'lt'},
-                {verts: [{x: 0, y: 0, z: 0}, {x: 1, y: 0, z: 0}, {x: 1, y: 0, z: 1}, {x: 0, y: 0, z: 1}], col: blocks.block_col, side: 'fr'},
-                {verts: [{x: 1, y: 0, z: 0}, {x: 1, y: 1, z: 0}, {x: 1, y: 1, z: 1}, {x: 1, y: 0, z: 1}], col: blocks.block_col, side: 'rt'},
-                {verts: [{x: 0, y: 1, z: 0}, {x: 1, y: 1, z: 0}, {x: 1, y: 1, z: 1}, {x: 0, y: 1, z: 1}], col: blocks.block_col, side: 'bk'},
-                {verts: [{x: 0, y: 0, z: 1}, {x: 1, y: 0, z: 1}, {x: 1, y: 1, z: 1}, {x: 0, y: 1, z: 1}], col: blocks.block_col, side: 'tp'}]
     },
     hud: function(){
         let r = 4;

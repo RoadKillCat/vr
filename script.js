@@ -9,6 +9,9 @@ let border_width = 2; //px
 //get contexts for HUDs etc.
 let ctx_l = cnvs_l.getContext('2d')
 let ctx_r = cnvs_r.getContext('2d')
+//useful for getting side of the canvii
+let cnvs_w;
+let cnvs_h;
 
 //rendering
 let wireframe = false;
@@ -70,7 +73,8 @@ function orient(e){
 
 function render_world(world){
     //left eye
-    zengine.render(world, {x: cam.x - cam.eye_dist/2 * Math.cos(zengine.to_rad(cam.yaw)),
+    zengine.render(world,
+                          {x: cam.x - cam.eye_dist/2 * Math.cos(zengine.to_rad(cam.yaw)),
                            y: cam.y + cam.eye_dist/2 * Math.sin(zengine.to_rad(cam.yaw)),
                            z: cam.z,
                            yaw: cam.yaw,
@@ -79,7 +83,8 @@ function render_world(world){
                            fov: cam.fov},
                    cnvs_l, wireframe, cam.horizon);
     //right eye
-    zengine.render(world, {x: cam.x + cam.eye_dist/2 * Math.cos(zengine.to_rad(cam.yaw)),
+    zengine.render(world,
+                          {x: cam.x + cam.eye_dist/2 * Math.cos(zengine.to_rad(cam.yaw)),
                            y: cam.y - cam.eye_dist/2 * Math.sin(zengine.to_rad(cam.yaw)),
                            z: cam.z,
                            yaw: cam.yaw,
@@ -90,9 +95,9 @@ function render_world(world){
 }
 
 function fts(){
-    cnvs_l.width = cnvs_r.width = (innerWidth - border_width) / 2;
-    cnvs_l.height = cnvs_r.height = innerHeight;
-    cnvs_l.style.borderRight = 
-    cnvs_r.style.borderLeft  = 
+    cnvs_w = cnvs_l.width  = cnvs_r.width = (innerWidth - border_width) / 2;
+    cnvs_h = cnvs_l.height = cnvs_r.height = innerHeight;
+    cnvs_l.style.borderRight =
+    cnvs_r.style.borderLeft  =
     (border_width/2).toString() + 'px dotted black';
 }
