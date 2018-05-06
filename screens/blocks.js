@@ -14,13 +14,20 @@ let blocks = {
         }
     },
     gen_world: function(){
+        let cam_vect = {x: Math.cos(zengine.to_rad(cam.pitch)) * Math.sin(zengine.to_rad(cam.yaw)),
+                        y: Math.cos(zengine.to_rad(cam.pitch)) * Math.cos(zengine.to_rad(cam.yaw)),
+                        z: Math.sin(zengine.to_rad(cam.pitch))};
         let world = [];
         for (let i = 0; i < blocks.blocks.length; i++){
-            world = world.concat(blocks.blocks[i].b().map(f => ({
-                                    verts: f.verts.map(zengine.translate(blocks.blocks[i].x,
-                                                                         blocks.blocks[i].y,
-                                                                         blocks.blocks[i].z)),
-                                    col: f.col})));
+            world = world.concat(blocks.blocks[i].b().map(function(f){
+                let c = f.col.split(',')
+                c[2] = (parseInt(c[2]) * (-zengine.dot_prod(cam_vect, f.vect) * 2/3 + 1/3)).toString() + '%)';
+                c = c.join(',');
+                return {verts: f.verts.map(zengine.translate(blocks.blocks[i].x,
+                                                             blocks.blocks[i].y,
+                                                             blocks.blocks[i].z)),
+                        col: c}
+            }));
         }
         return world;
     },
@@ -33,7 +40,7 @@ let blocks = {
         for (let i = 0; i < blocks.blocks.length; i++){
             let blk = objects.cube().map(f => ({verts:
             f.verts.map(zengine.translate(blocks.blocks[i].x, blocks.blocks[i].y, blocks.blocks[i].z)),
-                                               side: f.side}))
+                                                vect: f.vect}))
                                     .sort((a,b)=>zengine.distance(cam, zengine.centroid(a.verts))-
                                                  zengine.distance(cam, zengine.centroid(b.verts)));
             for (let j = 0; j < blk.length; j++){
@@ -69,16 +76,9 @@ let blocks = {
                 }
                 if (!inside) continue;
                 console.log('hit');
-                let ps = {bt: [ 0, 0,-1],
-                          lt: [-1, 0, 0],
-                          fr: [ 0,-1, 0],
-                          rt: [ 1, 0, 0],
-                          bk: [ 0, 1, 0],
-                          tp: [ 0, 0, 1],
-                         };
-                let nb = {x: blocks.blocks[i].x + ps[blk[j].side][0],
-                          y: blocks.blocks[i].y + ps[blk[j].side][1],
-                          z: blocks.blocks[i].z + ps[blk[j].side][2],
+                let nb = {x: blocks.blocks[i].x + blk[j].vect.x,
+                          y: blocks.blocks[i].y + blk[j].vect.y,
+                          z: blocks.blocks[i].z + blk[j].vect.z,
                           b: objects.cube};
                 //may be needed if ordering not effective...
                 //for (let ii = 0; i < blocks.blocks.length; i++){
