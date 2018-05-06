@@ -42,10 +42,19 @@ function start(){
     window.requestAnimationFrame(update);
 }
 
+let last_time = 0;
+let updates = 0;
 function update(time){
+    updates++;
     render_world(screen.gen_world());
-    if (screen.hud) screen.hud();
+    if (screen.hud) screen.hud(time);
     window.requestAnimationFrame(update);
+    if (time - last_time > 1000){
+        last_time = time;
+        console.log(updates);
+        updates = 0;
+    }
+
 }
 
 function keypress(e){

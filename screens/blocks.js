@@ -103,7 +103,7 @@ let blocks = {
         cam.x += cam.step * Math.sin(zengine.to_rad(angle));
         cam.y += cam.step * Math.cos(zengine.to_rad(angle));
     },
-    hud: function(){
+    hud: function(time){
         let r = 4;
         //distance from centre that the hud should be translated
         let dst = zengine.to_deg(Math.atan2(cam.eye_dist/2, cam.hud_dist)) / cam.fov * cnvs_l.width;
