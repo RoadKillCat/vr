@@ -25,7 +25,7 @@ let cam = {x: 0,
            step: 0.02,
            horizon: 8,
            eye_dist: 0.2,
-           hud_dist: 1
+           hud_dist: 4
            };
 
 //general

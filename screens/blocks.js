@@ -9,7 +9,7 @@ let blocks = {
         blocks.blocks = [];
         for (let x = -10; x < 10; x++){
             for (let y = -10; y < 10; y++){
-                blocks.blocks.push({x: x, y: y, z: 0, b: objects.grass});
+                blocks.blocks.push({x: x, y: y, z: parseInt(perlin.get(x/10, y/10)*10), b: objects.grass});
             }
         }
     },
@@ -19,15 +19,13 @@ let blocks = {
                         z: Math.sin(zengine.to_rad(cam.pitch))};
         let world = [];
         for (let i = 0; i < blocks.blocks.length; i++){
-            world = world.concat(blocks.blocks[i].b().map(function(f){
-                let c = f.col.split(',')
-                c[2] = (parseInt(c[2]) * (-zengine.dot_prod(cam_vect, f.vect) * 2/3 + 1/3)).toString() + '%)';
-                c = c.join(',');
-                return {verts: f.verts.map(zengine.translate(blocks.blocks[i].x,
-                                                             blocks.blocks[i].y,
-                                                             blocks.blocks[i].z)),
-                        col: c}
-            }));
+            world = world.concat(blocks.blocks[i].b().map(
+                f => ({verts: f.verts.map(zengine.translate(blocks.blocks[i].x,
+                                                            blocks.blocks[i].y,
+                                                            blocks.blocks[i].z)),
+                       vect: f.vect,
+                       col:  f.col})
+            ));
         }
         return world;
     },
